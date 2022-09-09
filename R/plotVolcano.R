@@ -15,8 +15,7 @@ plotVolcano = function(data_results,
                        labelTop = 10,
                        labelColname = "SYMBOL",
                        ExprColname = "baseMean",
-                       Exprcutoff = 10,
-                       xlim = F)
+                       Exprcutoff = 10)
 {
   data_results = filter(data_results, !is.na(!!sym(FCcolname)), !is.na(!!sym(Pcolname)), !is.na(!!sym(IDcolname)))
   data_results[,".group"] = cut(data_results[[FCcolname]],
@@ -24,9 +23,9 @@ plotVolcano = function(data_results,
                                 labels = labels, right = FALSE)
   data_results[, ".radius"] = sqrt(data_results[,FCcolname]**2 + (-log(data_results[,Pcolname], 10))**2)*sign(data_results[,FCcolname])
 
-  .labelsUP = filter(data_results, abs(!!sym(FCcolname)) > abs(FCcutoff), !!sym(Pcolname) < 0.05, !!sym(ExprColname) > Exprcutoff) %>%
+  .labelsUP = filter(data_results, abs(!!sym(FCcolname)) > abs(FCcutoff), !!sym(Pcolname) < Pcutoff, !!sym(ExprColname) > Exprcutoff) %>%
     arrange(., -abs(!!sym(FCcolname))) %>% arrange(., .radius) %>% head(., labelTop)
-  .labelsDOWN = filter(data_results, abs(!!sym(FCcolname)) > abs(FCcutoff), !!sym(Pcolname) < 0.05, !!sym(ExprColname) > Exprcutoff) %>%
+  .labelsDOWN = filter(data_results, abs(!!sym(FCcolname)) > abs(FCcutoff), !!sym(Pcolname) < Pcutoff, !!sym(ExprColname) > Exprcutoff) %>%
     arrange(., -abs(!!sym(FCcolname))) %>%  arrange(., -.radius) %>% head(., labelTop)
   .labels = rbind(.labelsUP, .labelsDOWN) %>% filter(., !duplicated(!!sym(labelColname)))
   .maxfc = max(-min(data_results[,FCcolname]), max(data_results[,FCcolname]))
