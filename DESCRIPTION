@@ -18,4 +18,4 @@ Imports:
 	plyr,
 	ggpubr,
 	GOfuncR
-	
+	ggrepel
